@@ -1,4 +1,4 @@
-require_relative '../lib/penny_allocation'
+require_relative 'spec_helper'
 
 describe PennyAllocation do
   let(:a) { 'UNKNOWN EXPECTATION' }
@@ -47,13 +47,6 @@ describe PennyAllocation do
         expect(subject).to eq [2]
       end
     end
-
-    context '' do
-      # let(:)
-      it '' do
-
-      end
-    end
   end
 
   context 'with options' do
@@ -94,13 +87,12 @@ describe PennyAllocation do
   context '#round_comp_total' do
     context 'with extra' do
       let(:numbers) {{
-        0.51 => 1,
-        0.501 => 1,
-        0.5001 => 1,
-        0.50001 => 1,
-        0.500001 => 1
-         }}
-      it '' do
+          0.51 => 1,
+          0.501 => 1,
+          0.5001 => 1,
+          0.50001 => 1,
+          0.500001 => 1}}
+      it 'rounds up for just above .5' do
         numbers.each do |number, result|
           expect(PennyAllocator.new.round_comp_total(number)).to eq result
         end
