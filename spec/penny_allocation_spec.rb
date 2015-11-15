@@ -17,6 +17,14 @@ describe PennyAllocation do
     end
   end
 
+  context 'with invalid array_of_values' do
+    let(:array_of_values) { ['invalid'] }
+    let(:options) {{}}
+    it 'raises exception' do
+      expect{subject}.to raise_exception NoMethodError
+    end
+  end
+
   context 'with array_of_values' do
     let(:options) {{}}
 
@@ -45,6 +53,27 @@ describe PennyAllocation do
       let(:array_of_values) {[1.5]}
       it 'rounds up' do
         expect(subject).to eq [2]
+      end
+    end
+
+    context 'with partial pennies' do
+      let(:array_of_values) {[ 1.1, 3.3, 4.4, 5.5, 6.6, 7.7]}
+      it '' do
+        expect(subject).to eq [1, 3, 4, 6, 7, 8]
+      end
+    end
+
+    context 'with enough low partials to make two wholes' do
+      let(:array_of_values) {[0.2] * 8}
+      it 'rounds to having two wholes' do
+        expect(subject).to eq [1, 1, 0, 0, 0, 0, 0]
+      end
+    end
+
+    context 'with not enough low partials to make two wholes' do
+      let(:array_of_values) {[0.2] * 7}
+      it 'rounds to only one whole' do
+        expect(subject).to eq [1, 0, 0, 0, 0, 0, 0]
       end
     end
   end
@@ -77,8 +106,17 @@ describe PennyAllocation do
 
       context 'without comp_total' do
         let(:options) {{comp_total: false}}
-        it 'preserves the half cent' do
-          expect(subject).to eq [1, 0]
+        context 'with quarters' do
+          it 'preserves the half cent' do
+            expect(subject).to eq [1, 0]
+          end
+        end
+
+        context 'with thirds' do
+          let(:array_of_values) {[0.3, 0.3, 0.3]}
+          it 'rounds one of them up and the rest of them down' do
+            expect(subject).to eq [1, 0, 0]
+          end
         end
       end
     end
