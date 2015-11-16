@@ -4,15 +4,17 @@ module PennyAllocation
 
     aoh = floored_values_with_fractional_remainders(array_of_values)
 
-    values = aoh.sort_by do |hash|
+    aoh.sort_by do |hash|
       1 - hash[:fractional_value]
-    end
-
-    values.each_with_index do |hash, index|
+    end.each_with_index do |hash, index|
       hash[:value] += 1 if index < number_to_allocate(options, fractional_sum(aoh))
+    end.sort_by do |hash|
+      hash[:index]
+    end.map do |hash|
+      hash[:value]
     end
 
-    aoh.map {|h| h[:value] }
+    # aoh.map {|h| h[:value] }
   end
 
   def round_comp_total(number)
