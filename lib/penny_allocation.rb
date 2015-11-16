@@ -34,8 +34,8 @@ module PennyAllocation
   end
 
   def floored_values_with_fractional_remainders(values)
-    values.map do |v|
-      {fractional_value: (v % 1), value: v.floor}
+    values.each_with_index.map do |v, index|
+      {fractional_value: (v % 1), value: v.floor, index: index}
     end
   end
 
