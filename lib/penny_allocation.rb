@@ -1,17 +1,15 @@
 require 'pry'
 module PennyAllocation
   def reallocate_partial_pennies(array_of_values, options = {})
-    fractional_sum = 0
 
     aoh = floored_values_with_fractional_remainders(array_of_values)
 
     values = aoh.sort_by do |hash|
-      fractional_sum += hash[:fractional_value]
       1 - hash[:fractional_value]
     end
 
     values.each_with_index do |hash, index|
-      hash[:value] += 1 if index < number_to_allocate(options, fractional_sum)
+      hash[:value] += 1 if index < number_to_allocate(options, fractional_sum(aoh))
     end
 
     aoh.map {|h| h[:value] }
@@ -26,6 +24,14 @@ module PennyAllocation
   end
 
   private
+
+  def fractional_sum(aoh)
+    sum = 0
+    aoh.each do |hash|
+      sum += hash[:fractional_value]
+    end
+    sum
+  end
 
   def floored_values_with_fractional_remainders(values)
     values.map do |v|
