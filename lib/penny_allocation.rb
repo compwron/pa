@@ -7,7 +7,7 @@ module PennyAllocation
     aoh.sort_by do |hash|
       1 - hash[:fractional_value]
     end.each_with_index do |hash, index|
-      hash[:value] += 1 if index < number_to_allocate(options, fractional_sum(aoh))
+      hash[:value] += 1 if index < number_to_allocate(options, fractional_sum(array_of_values))
     end.sort_by do |hash|
       hash[:index]
     end.map do |hash|
@@ -27,18 +27,20 @@ module PennyAllocation
 
   private
 
-  def fractional_sum(aoh)
-    sum = 0
-    aoh.each do |hash|
-      sum += hash[:fractional_value]
-    end
-    sum
+  def fractional_sum(values)
+    values.map do |val|
+      fractional_value(val)
+    end.inject(&:+)
   end
 
   def floored_values_with_fractional_remainders(values)
     values.each_with_index.map do |v, index|
-      {fractional_value: (v % 1), value: v.floor, index: index}
+      {fractional_value: fractional_value(v), value: v.floor, index: index}
     end
+  end
+
+  def fractional_value(value)
+    value % 1
   end
 
   def number_to_allocate(options, fractional_sum)
