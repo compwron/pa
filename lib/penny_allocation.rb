@@ -15,7 +15,7 @@ module PennyAllocation
   end
 
   def round_comp_total(number)
-    if number % 1 == 0.500000
+    if fractional_value(number) == 0.500000
       number.floor
     else
       number.round
@@ -35,8 +35,8 @@ module PennyAllocation
   end
 
   def floored_values_with_fractional_remainders(values)
-    values.each_with_index.map do |v, index|
-      {fractional_value: fractional_value(v), value: v.floor, index: index}
+    values.each_with_index.map do |v, original_position|
+      {fractional_value: fractional_value(v), value: v.floor, index: original_position}
     end
   end
 
@@ -47,8 +47,8 @@ module PennyAllocation
   def number_to_allocate(options, fractional_sum)
     if options[:comp_total]
         round_comp_total(fractional_sum)
-      else
-        fractional_sum.round
-      end
+    else
+      fractional_sum.round
     end
+  end
 end
