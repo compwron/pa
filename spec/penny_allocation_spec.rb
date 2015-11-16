@@ -57,16 +57,16 @@ describe PennyAllocation do
     end
 
     context 'with partial pennies' do
-      let(:array_of_values) {[ 1.1, 3.3, 4.4, 5.5, 6.6, 7.7]}
-      it '' do
-        expect(subject).to eq [1, 3, 4, 6, 7, 8]
+      let(:array_of_values) {[ 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.0]}
+      it 'rounds' do
+        expect(subject).to eq [1, 2, 3, 4, 6, 7, 8, 9, 10, 10]
       end
     end
 
     context 'with enough low partials to make two wholes' do
       let(:array_of_values) {[0.2] * 8}
       it 'rounds to having two wholes' do
-        expect(subject).to eq [1, 1, 0, 0, 0, 0, 0]
+        expect(subject).to eq [1, 1, 0, 0, 0, 0, 0, 0]
       end
     end
 
@@ -74,6 +74,23 @@ describe PennyAllocation do
       let(:array_of_values) {[0.2] * 7}
       it 'rounds to only one whole' do
         expect(subject).to eq [1, 0, 0, 0, 0, 0, 0]
+      end
+    end
+
+    context 'with negatives, which should never happen' do
+      context 'with negative at the beginning' do
+        let(:array_of_values) { [-1, 0.4, 0.4, 0.4]}
+        it 'reverses where the additive whole sits' do
+          # I don't know why this happens or whether it is desired behavior
+          expect(subject).to eq  [-1, 0, 0, 1]
+        end
+      end
+
+      context 'with negative second' do
+        let(:array_of_values) {[0.4, -1, 0.4, 0.4]}
+        it 'rounds' do
+          expect(subject).to eq [1, -1, 0, 0]
+        end
       end
     end
   end
