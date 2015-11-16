@@ -5,13 +5,13 @@ module PennyAllocation
 
     aoh = array_of_hashes(array_of_values)
 
-    unsorted_values = aoh.map do |hash|
+    foo = aoh.each do |hash|
       hash.merge!(fractional_value: hash[:value] % 1)
       hash[:value] = hash[:value].floor
       hash
     end
 
-    values = aoh.sort_by do |hash|
+    values = foo.sort_by do |hash|
       hash[:value] = hash[:value].floor
       fractional_sum += hash[:fractional_value]
       1 - hash[:fractional_value]
