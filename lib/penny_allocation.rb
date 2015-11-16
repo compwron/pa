@@ -3,15 +3,18 @@ module PennyAllocation
   def reallocate_partial_pennies(array_of_values, options = {})
     fractional_sum = 0
 
-    aoh = array_of_hashes(array_of_values)
+    aoh = array_of_values.map {|v|
+      {fractional_value: (v % 1), value: v.floor}
+    }
 
-    foo = aoh.each do |hash|
-      hash.merge!(fractional_value: hash[:value] % 1)
-      hash[:value] = hash[:value].floor
-      hash
-    end
+    # foo = aoh.map do |hash|
+    #   hash.merge!(fractional_value: hash[:value] % 1)
+    #   hash[:value] = hash[:value].floor
+    #   hash
+    #   {fractional_value: hash}
+    # end
 
-    values = foo.sort_by do |hash|
+    values = aoh.sort_by do |hash|
       hash[:value] = hash[:value].floor
       fractional_sum += hash[:fractional_value]
       1 - hash[:fractional_value]
