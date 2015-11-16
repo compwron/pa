@@ -1,3 +1,4 @@
+require 'pry'
 module PennyAllocation
   def reallocate_partial_pennies(array_of_values, options = {})
     fractional_sum = 0
@@ -11,14 +12,8 @@ module PennyAllocation
       1 - fractional_value
     end
 
-    number_to_allocate = if options[:comp_total]
-                           round_comp_total(fractional_sum)
-                         else
-                           fractional_sum.round
-                         end
-
     values.each_with_index do |hash, index|
-      hash[:value] += 1 if index < number_to_allocate
+      hash[:value] += 1 if index < number_to_allocate(options, fractional_sum)
     end
 
     array_of_hashes.map {|h| h[:value] }
@@ -31,4 +26,12 @@ module PennyAllocation
       number.round
     end
   end
+
+  def number_to_allocate(options, fractional_sum)
+    if options[:comp_total]
+        round_comp_total(fractional_sum)
+      else
+        fractional_sum.round
+      end
+    end
 end

@@ -96,43 +96,47 @@ describe PennyAllocation do
   end
 
   context 'with options' do
-    let(:array_of_values) {[]}
-
-    context 'with invalid options' do
-      let(:options) { 'invalid options' }
-      it 'raises NameError' do
-        expect{subject}.to raise_exception TypeError
+    context 'with values' do
+      let(:array_of_values) {[0]}
+      context 'with invalid options' do
+        let(:options) { 'invalid options' }
+        it 'raises NameError' do
+          expect{subject}.to raise_exception TypeError
+        end
       end
     end
 
-    context 'with invalid comp total' do
-      let(:options) { {comp_total: 'invalid'}}
-      it 'raises NameError' do
-        expect(subject).to eq []
-      end
-    end
-
-    context 'with leftover total adding up to half' do
-      let(:array_of_values) {[0.25, 0.25]}
-      context 'with comp_total' do
-        let(:options) {{comp_total: true}}
-        it 'rounds down both values' do
-          expect(subject).to eq [0, 0]
+    context 'without values' do
+      let(:array_of_values) {[]}
+      context 'with invalid comp total' do
+        let(:options) { {comp_total: 'invalid'}}
+        it 'raises NameError' do
+          expect(subject).to eq []
         end
       end
 
-      context 'without comp_total' do
-        let(:options) {{comp_total: false}}
-        context 'with quarters' do
-          it 'preserves the half cent' do
-            expect(subject).to eq [1, 0]
+      context 'with leftover total adding up to half' do
+        let(:array_of_values) {[0.25, 0.25]}
+        context 'with comp_total' do
+          let(:options) {{comp_total: true}}
+          it 'rounds down both values' do
+            expect(subject).to eq [0, 0]
           end
         end
 
-        context 'with thirds' do
-          let(:array_of_values) {[0.3, 0.3, 0.3]}
-          it 'rounds one of them up and the rest of them down' do
-            expect(subject).to eq [1, 0, 0]
+        context 'without comp_total' do
+          let(:options) {{comp_total: false}}
+          context 'with quarters' do
+            it 'preserves the half cent' do
+              expect(subject).to eq [1, 0]
+            end
+          end
+
+          context 'with thirds' do
+            let(:array_of_values) {[0.3, 0.3, 0.3]}
+            it 'rounds one of them up and the rest of them down' do
+              expect(subject).to eq [1, 0, 0]
+            end
           end
         end
       end
