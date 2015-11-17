@@ -1,4 +1,3 @@
-require 'pry'
 module PennyAllocation
   def reallocate_partial_pennies(values, options = {})
     floored_values_with_fractional_remainders(values).sort_by do |hash|
