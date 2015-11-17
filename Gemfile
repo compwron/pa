@@ -6,7 +6,6 @@ group :test do
 end
 
 group :development do
-  gem 'guard'
   gem 'simplecov'
   gem 'rake'
 end
