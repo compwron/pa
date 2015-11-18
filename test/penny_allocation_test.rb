@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '../lib/penny_allocation'
+require_relative '../lib/penny_allocation'
 
 class PennyAllocationTest < Minitest::Test
   include PennyAllocation
@@ -19,7 +19,7 @@ class PennyAllocationTest < Minitest::Test
   def test_single_fractional_discard
     check [1, 2, 3.4], [1, 2 ,3]
   end
-  
+
   def test_single_fractional_keep
     check [4, 2.6, 3], [4, 3 ,3]
   end

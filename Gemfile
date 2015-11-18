@@ -8,4 +8,5 @@ end
 group :development do
   gem 'simplecov'
   gem 'rake'
+  gem 'minitest'
 end
