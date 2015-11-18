@@ -4,12 +4,7 @@ module PennyAllocation
   def reallocate_partial_pennies(array_of_values, options = {}) # public method
     values = enhanced_values(array_of_values)
 
-    # round off the sum, since we can't end with a fraction of a penny
-
-    # round down the values, and redistribute the total partial_pennies among
-    # them in decreasing order of their original fractional pennies
-    values = values.sort_by {|v| -v.fractional}
-    (0 ... rounded_partial_pennies_sum(options, partial_pennies_sum(values))).each do |i|
+    (0...rounded_partial_pennies_sum(options, partial_pennies_sum(values))).each do |i|
       values[i].whole += 1
     end
 
@@ -30,6 +25,7 @@ module PennyAllocation
   private
 
   def partial_pennies_sum(values)
+    # round off the sum, since we can't end with a fraction of a penny
     values.inject(0) {|sum, v| sum + v.fractional}
   end
 
@@ -42,7 +38,7 @@ module PennyAllocation
         val.whole, val.fractional = v.divmod 1
         val.index = i
       end
-    end
+    end.sort_by {|v| -v.fractional}
   end
 
   def rounded_partial_pennies_sum(options, partial_pennies_sum)
