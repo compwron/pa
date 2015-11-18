@@ -1,6 +1,5 @@
-require 'ostruct'
-
 module PennyAllocation
+  require 'ostruct'
   def reallocate_partial_pennies(array_of_values, options = {}) # public method
     values = enhanced_values(array_of_values)
 
