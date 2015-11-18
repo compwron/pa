@@ -1,17 +1,15 @@
 require 'ostruct'
 
 module PennyAllocation
-  def reallocate_partial_pennies(array_of_values, options = {})
+  def reallocate_partial_pennies(array_of_values, options = {}) # public method
     values = enhanced_values(array_of_values)
 
     # round off the sum, since we can't end with a fraction of a penny
-    partial_pennies_sum = values.inject(0) {|sum, v| sum + v.fractional}
-
 
     # round down the values, and redistribute the total partial_pennies among
     # them in decreasing order of their original fractional pennies
     values = values.sort_by {|v| -v.fractional}
-    (0 ... rounded_partial_pennies_sum(options, partial_pennies_sum)).each do |i|
+    (0 ... rounded_partial_pennies_sum(options, partial_pennies_sum(values))).each do |i|
       values[i].whole += 1
     end
 
@@ -21,7 +19,7 @@ module PennyAllocation
 
   # round the total fractional pennies
   # if options[:comp_total] is set, 0.5 is rounded downwards.
-  def round_comp_total(total)
+  def round_comp_total(total) # pubic method
     if total % 1 == 0.5
       total.floor
     else
@@ -30,6 +28,10 @@ module PennyAllocation
   end
 
   private
+
+  def partial_pennies_sum(values)
+    values.inject(0) {|sum, v| sum + v.fractional}
+  end
 
   def enhanced_values(values)
     # split into whole and fractional parts.
