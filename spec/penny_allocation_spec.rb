@@ -150,7 +150,9 @@ describe PennyAllocation do
           0.501 => 1,
           0.5001 => 1,
           0.50001 => 1,
-          0.500001 => 1}}
+          0.500001 => 1,
+          0.5 => 0,
+          0.4 => 0}}
       it 'rounds up for just above .5' do
         numbers.each do |number, result|
           expect(PennyAllocator.new.round_comp_total(number)).to eq result
