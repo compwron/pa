@@ -42,7 +42,8 @@ module PennyAllocation
     # the array and need to unsort at the end.
     values.map do |v|
       OpenStruct.new.tap do |val|
-        val.whole, val.fractional = v.divmod 1
+        val.whole = v.floor
+        val.fractional = (v - val.whole)
       end
     end
   end
