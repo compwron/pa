@@ -31,12 +31,9 @@ module PennyAllocation
   private
 
   def pennies_to_allocate(values, options)
-    rounded_partial_pennies_sum(options, partial_pennies_sum(values))
-  end
-
-  def partial_pennies_sum(values)
     # round off the sum, since we can't end with a fraction of a penny
-    values.inject(0) {|sum, v| sum + v.fractional}
+    sum = values.inject(0) {|sum, v| sum + v.fractional}
+    rounded_partial_pennies_sum(options, sum)
   end
 
   def enhanced_values(values)
