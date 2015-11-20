@@ -116,6 +116,22 @@ describe PennyAllocator do
           expect(subject).to eq [1, 0, 0, 0, 0, 0, 0]
         end
       end
+
+      context 'with values and invalid non-false comp total' do
+        let(:array_of_values) { [0.5] }
+        let(:options) { {comp_total: 'invalid'} }
+        it 'returns empty array' do
+          expect(subject).to eq [0]
+        end
+      end
+
+      context 'with values and valid comp total' do
+        let(:array_of_values) { [0.5] }
+        let(:options) { {comp_total: false } }
+        it 'returns empty array' do
+          expect(subject).to eq [1]
+        end
+      end
     end
 
     context 'with options' do
@@ -123,7 +139,7 @@ describe PennyAllocator do
         let(:array_of_values) { [0] }
         context 'with invalid options' do
           let(:options) { 'invalid options' }
-          it 'raises NameError' do
+          it 'raises TypeError' do
             expect { subject }.to raise_exception TypeError
           end
         end
@@ -133,7 +149,7 @@ describe PennyAllocator do
         let(:array_of_values) { [] }
         context 'with invalid comp total' do
           let(:options) { {comp_total: 'invalid'} }
-          it 'raises NameError' do
+          it 'returns empty array' do
             expect(subject).to eq []
           end
         end
@@ -156,9 +172,9 @@ describe PennyAllocator do
             end
 
             context 'with thirds' do
-              let(:array_of_values) { [0.3, 0.3, 0.3] }
+              let(:array_of_values) { [0.3, 0.3, 0.3, 0.3] }
               it 'rounds one of them up and the rest of them down' do
-                expect(subject).to eq [1, 0, 0]
+                expect(subject).to eq [1, 0, 0, 0]
               end
             end
           end
